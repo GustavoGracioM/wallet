@@ -15,18 +15,19 @@ class Login extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  async handleChange({ target }) {
-    await this.setState({
+  handleChange({ target }) {
+    this.setState({
       [target.name]: target.value,
+    }, () => {
+      const { email, password } = this.state;
+      const minCharacters = 6;
+      // regex retirando desse site https://www.horadecodar.com.br/2020/09/13/como-validar-email-com-javascript/
+      const regex = /\S+@\S+\.\S+/;
+      if (regex.test(email) && password.length >= minCharacters) {
+        return this.setState({ isDisabled: false });
+      }
+      return this.setState({ isDisabled: true });
     });
-    const { email, password } = this.state;
-    const minCharacters = 6;
-    // regex retirando desse site https://www.horadecodar.com.br/2020/09/13/como-validar-email-com-javascript/
-    const regex = /\S+@\S+\.\S+/;
-    if (regex.test(email) && password.length >= minCharacters) {
-      return this.setState({ isDisabled: false });
-    }
-    return this.setState({ isDisabled: true });
   }
 
   handleClick(event) {
