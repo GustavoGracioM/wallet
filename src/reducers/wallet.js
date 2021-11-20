@@ -2,7 +2,7 @@
 const INITIAL_STATE = {
   currencies: [],
   expenses: [],
-  valueTotal: '0',
+  valueTotal: 0,
 };
 
 const wallet = (state = INITIAL_STATE, action) => {
@@ -21,6 +21,14 @@ const wallet = (state = INITIAL_STATE, action) => {
     return ({
       ...state,
       valueTotal: action.value,
+    });
+  case 'DELETE_EXPENDS':
+    return ({
+      ...state,
+      valueTotal: state.valueTotal - state.expenses
+        .find((value) => (value.id === action.value)).valueTotal,
+      expenses: state.expenses
+        .filter((value) => value.id !== action.value),
     });
   default:
     return state;

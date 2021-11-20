@@ -36,15 +36,8 @@ class Form extends React.Component {
     console.log(expenses);
     if (expenses) {
       return Object.keys(expenses)
-        .reduce((acc, curr) => acc + Number(expenses[curr].expense), 0);
+        .reduce((acc, curr) => acc + Number(expenses[curr].valueTotal), 0);
     }
-  }
-
-  currenciesList() {
-    const { currencies } = this.state;
-    return Object.keys(currencies).map((key) => (
-      <option key={ key } value={ key }>{key}</option>
-    ));
   }
 
   handleChange({ target }) {
@@ -65,18 +58,36 @@ class Form extends React.Component {
       categoryExpense,
     } = this.state;
     let { id } = this.state;
-    let { ask } = (await getCurrencies()).value[currency];
+    const { ask, codein, name } = (await getCurrencies()).value[currency];
+    const valueTotal = expense * ask;
     id += 1;
-    ask *= expense;
     addExpense({
       id,
-      expense: ask.toFixed(2),
+      expense,
+      ask,
+      name,
+      codein,
+      valueTotal,
       descriptionExpense,
       currency,
       payment,
       categoryExpense,
     });
     this.setState({ id }, () => addValueTotal(this.counterCurrencies()));
+  }
+
+  currenciesList() {
+    const { currencies } = this.state;
+    return Object.keys(currencies).map((key) => (
+      <option
+        key={ key }
+        value={ key }
+        data-testid={ key }
+      >
+        {key}
+
+      </option>
+    ));
   }
 
   render() {
@@ -142,7 +153,7 @@ Form.propTypes = {
   getCurrencies: PropTypes.func.isRequired,
   addValueTotal: PropTypes.func.isRequired,
   expenses: PropTypes.arrayOf(PropTypes.shape({
-    expense: PropTypes.shape({}).isRequired,
+    valueTotal: PropTypes.shape({}).isRequired,
   })).isRequired,
 };
 
