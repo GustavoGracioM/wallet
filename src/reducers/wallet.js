@@ -15,7 +15,7 @@ const wallet = (state = INITIAL_STATE, action) => {
   case 'ADD_CURRENCIES':
     return ({
       ...state,
-      currencies: action.value,
+      currencies: Object.keys(action.value).map((key) => key),
     });
   case 'VALUE_TOTAL':
     return ({
@@ -25,10 +25,11 @@ const wallet = (state = INITIAL_STATE, action) => {
   case 'DELETE_EXPENDS':
     return ({
       ...state,
-      valueTotal: state.valueTotal - state.expenses
-        .find((value) => (value.id === action.value)).valueTotal,
+      valueTotal:
+      state.valueTotal
+      - (action.value.value * action.value.exchangeRates[action.value.currency].ask),
       expenses: state.expenses
-        .filter((value) => value.id !== action.value),
+        .filter((value) => value.id !== action.value.id),
     });
   default:
     return state;

@@ -4,37 +4,35 @@ import { connect } from 'react-redux';
 import { actionCurrencies, actionValueTotal, actionWallet } from '../actions';
 import { categoryExpenseList, paymentList } from './Options';
 
+const INITIAL_STATE = {
+  id: 0,
+  expense: 0,
+  descriptionExpense: '',
+  currency: 'USD',
+  payment: 'Dinheiro',
+  categoryExpense: 'Alimentação',
+};
 class Form extends React.Component {
   constructor() {
     super();
-    this.state = {
-      currencies: [],
-      id: 0,
-      expense: 0,
-      descriptionExpense: '',
-      currency: 'USD',
-      payment: 'Dinheiro',
-      categoryExpense: 'Alimentação',
-    };
+    this.state = INITIAL_STATE;
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    this.currenciesState = this.currenciesState.bind(this);
   }
 
   async componentDidMount() {
     const { getCurrencies } = this.props;
-    this.currenciesState(await getCurrencies());
-  }
-
-  currenciesState(currencies) {
-    this.setState({ currencies: currencies.value });
+    getCurrencies();
   }
 
   counterCurrencies() {
     const { expenses } = this.props;
+    console.log(expenses);
     if (expenses) {
       return expenses
-        .reduce((acc, curr) => acc + Number(curr.valueTotal), 0);
+        .reduce((acc, curr) => acc
+        + Number(curr.exchangeRates[curr.currency].ask * curr.value),
+        0);
     }
   }
 
@@ -52,45 +50,34 @@ class Form extends React.Component {
       currency,
       payment,
       categoryExpense,
-    } = this.state;
-    let { id } = this.state;
-    id += 1;
-    const { addExpense, addValueTotal, getCurrencies } = this.props;
-    const { ask, codein, name } = (await getCurrencies()).value[currency];
-    const valueTotal = (expense * Number(ask)).toFixed(2);
-    const nameExchange = name.split('/')[0];
-    const conversionCurrency = name.split('/')[1];
-    addExpense({
       id,
-      expense,
-      ask: Number(ask).toFixed(2),
-      nameExchange,
-      conversionCurrency,
-      codein,
-      valueTotal,
-      descriptionExpense,
+    } = this.state;
+    const { addExpense, addValueTotal, getCurrencies, expenses } = this.props;
+    const exchangeRates = (await getCurrencies()).value;
+    addExpense({
+      id: expenses.length,
       currency,
-      payment,
-      categoryExpense,
+      value: expense,
+      description: descriptionExpense,
+      method: payment,
+      tag: categoryExpense,
+      exchangeRates,
     });
-    this.setState({ id,
-      expense: 0,
-      descriptionExpense: '',
-      currency: 'USD',
-      payment: 'Dinheiro',
-      categoryExpense: 'Alimentação',
-    }, () => addValueTotal(this.counterCurrencies()));
+    this.setState(
+      { ...INITIAL_STATE, id },
+      () => addValueTotal(this.counterCurrencies()),
+    );
   }
 
   currenciesList() {
-    const { currencies } = this.state;
-    return Object.keys(currencies).map((key) => (
+    const { currencies } = this.props;
+    return currencies.map((currencie) => (
       <option
-        key={ key }
-        value={ key }
-        data-testid={ key }
+        key={ currencie }
+        value={ currencie }
+        data-testid={ currencie }
       >
-        {key}
+        {currencie}
 
       </option>
     ));
@@ -117,13 +104,17 @@ class Form extends React.Component {
           name="descriptionExpense"
           value={ descriptionExpense }
         />
-        <select
-          data-testid="currency-input"
-          name="currency"
-          value={ currency }
-        >
-          {this.currenciesList()}
-        </select>
+        <label htmlFor="currency">
+          <select
+            data-testid="currency-input"
+            id="currency"
+            name="currency"
+            value={ currency }
+          >
+            {this.currenciesList()}
+          </select>
+          Moeda
+        </label>
         <select
           data-testid="method-input"
           name="payment"
@@ -148,16 +139,20 @@ const mapDispatchToProps = (dispatch) => ({
   addExpense: (value) => dispatch(actionWallet(value)),
   addValueTotal: (value) => dispatch(actionValueTotal(value)),
   getCurrencies: () => dispatch(actionCurrencies()),
+  // addCurrencies: (value) => dispatch(addCurrencies(value)),
 });
 
 const mapStateToProps = (state) => ({
   expenses: state.wallet.expenses,
+  currencies: state.wallet.currencies,
 });
 
 Form.propTypes = {
   addExpense: PropTypes.func.isRequired,
   getCurrencies: PropTypes.func.isRequired,
   addValueTotal: PropTypes.func.isRequired,
+  currencies: PropTypes.arrayOf().isRequired,
+  // addCurrencies: PropTypes.func.isRequired,
   expenses: PropTypes.arrayOf(PropTypes.shape({
     valueTotal: PropTypes.shape({}).isRequired,
   })).isRequired,

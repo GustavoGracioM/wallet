@@ -6,7 +6,7 @@ export const actionWallet = (value) => ({ type: 'ADD_WALLET', value });
 export const actionValueTotal = (value) => ({ type: 'VALUE_TOTAL', value });
 export const actionDeleteExpends = (value) => ({ type: 'DELETE_EXPENDS', value });
 
-const addCurrencies = (value) => ({ type: 'ADD_CURRENCIES', value });
+export const addCurrencies = (value) => ({ type: 'ADD_CURRENCIES', value });
 
 export const actionCurrencies = () => (dispatch) => currenciesApi()
   .then((response) => dispatch(addCurrencies(response)));

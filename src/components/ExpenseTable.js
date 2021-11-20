@@ -11,7 +11,7 @@ class ExpenseTable extends React.Component {
       'Câmbio utilizado',
       'Valor convertido',
       'Moeda de conversão',
-      'Editar'];
+      'Editar/Excluir'];
 
     const { expenses, deleteExpense } = this.props;
     return (
@@ -22,27 +22,33 @@ class ExpenseTable extends React.Component {
           </tr>
         </thead>
         <tbody>
-          {expenses.length >= 1 && expenses.map((expense) => (
-            <tr key={ expense.id }>
-              <td>{expense.descriptionExpense}</td>
-              <td>{expense.categoryExpense}</td>
-              <td>{expense.payment}</td>
-              <td>{expense.expense}</td>
-              <td>{expense.nameExchange}</td>
-              <td>{expense.ask}</td>
-              <td>{expense.valueTotal}</td>
-              <td>{expense.conversionCurrency}</td>
-              <td>
-                <button
-                  type="button"
-                  data-testid="delete-btn"
-                  onClick={ () => deleteExpense(expense.id) }
-                >
-                  Deletar
-                </button>
-              </td>
-            </tr>
-          ))}
+          {expenses.length >= 1 && expenses.map((expense) => {
+            const { ask, name } = expense.exchangeRates[expense.currency];
+            const nameExchange = name.split('/')[0];
+            const valueTotal = Number(ask * expense.value).toFixed(2);
+            const exchange = Number(ask).toFixed(2);
+            return (
+              <tr key={ expense.id }>
+                <td>{expense.description}</td>
+                <td>{expense.tag}</td>
+                <td>{expense.method}</td>
+                <td>{expense.value}</td>
+                <td>{nameExchange}</td>
+                <td>{exchange}</td>
+                <td>{valueTotal}</td>
+                <td>Real</td>
+                <td>
+                  <button
+                    type="button"
+                    data-testid="delete-btn"
+                    onClick={ () => deleteExpense(expense) }
+                  >
+                    Deletar
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     );

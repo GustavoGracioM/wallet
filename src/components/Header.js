@@ -5,10 +5,11 @@ import PropTypes from 'prop-types';
 class Header extends React.Component {
   render() {
     const { email, valueTotal } = this.props;
+    const value = valueTotal ? valueTotal.toFixed(2) : 0;
     return (
       <header>
         <p data-testid="email-field">{email}</p>
-        <p data-testid="total-field">{valueTotal}</p>
+        <p data-testid="total-field">{value}</p>
         <p data-testid="header-currency-field">BRL</p>
       </header>
     );
