@@ -15,7 +15,6 @@ class Form extends React.Component {
       currency: 'USD',
       payment: 'Dinheiro',
       categoryExpense: 'Alimentação',
-
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -33,10 +32,9 @@ class Form extends React.Component {
 
   counterCurrencies() {
     const { expenses } = this.props;
-    console.log(expenses);
     if (expenses) {
-      return Object.keys(expenses)
-        .reduce((acc, curr) => acc + Number(expenses[curr].valueTotal), 0);
+      return expenses
+        .reduce((acc, curr) => acc + Number(curr.valueTotal), 0);
     }
   }
 
@@ -48,8 +46,6 @@ class Form extends React.Component {
 
   async handleClick(event) {
     event.preventDefault();
-    const { addExpense, addValueTotal } = this.props;
-    const { getCurrencies } = this.props;
     const {
       expense,
       descriptionExpense,
@@ -58,14 +54,18 @@ class Form extends React.Component {
       categoryExpense,
     } = this.state;
     let { id } = this.state;
-    const { ask, codein, name } = (await getCurrencies()).value[currency];
-    const valueTotal = expense * ask;
     id += 1;
+    const { addExpense, addValueTotal, getCurrencies } = this.props;
+    const { ask, codein, name } = (await getCurrencies()).value[currency];
+    const valueTotal = (expense * Number(ask)).toFixed(2);
+    const nameExchange = name.split('/')[0];
+    const conversionCurrency = name.split('/')[1];
     addExpense({
       id,
       expense,
-      ask,
-      name,
+      ask: Number(ask).toFixed(2),
+      nameExchange,
+      conversionCurrency,
       codein,
       valueTotal,
       descriptionExpense,
@@ -73,7 +73,13 @@ class Form extends React.Component {
       payment,
       categoryExpense,
     });
-    this.setState({ id }, () => addValueTotal(this.counterCurrencies()));
+    this.setState({ id,
+      expense: 0,
+      descriptionExpense: '',
+      currency: 'USD',
+      payment: 'Dinheiro',
+      categoryExpense: 'Alimentação',
+    }, () => addValueTotal(this.counterCurrencies()));
   }
 
   currenciesList() {

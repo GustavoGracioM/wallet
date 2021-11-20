@@ -5,48 +5,45 @@ import { actionDeleteExpends } from '../actions';
 
 class ExpenseTable extends React.Component {
   render() {
+    const tags = ['Descrição', 'Tag',
+      'Método de pagamento',
+      'Valor', 'Moeda',
+      'Câmbio utilizado',
+      'Valor convertido',
+      'Moeda de conversão',
+      'Editar'];
+
     const { expenses, deleteExpense } = this.props;
     return (
       <table>
-        <tr>
-          <th>Descrição</th>
-          <th>Tag</th>
-          <th>Método de pagamento,</th>
-          <th>Valor</th>
-          <th>Moeda</th>
-          <th>Câmbio utilizado</th>
-          <th>Valor convertido</th>
-          <th>Moeda de conversão</th>
-          <th>Editar</th>
-        </tr>
-        {expenses && Object.keys(expenses).map((key) => {
-          const name = expenses[key].name.split('/')[0];
-          const real = expenses[key].name.split('/')[1];
-          return (
-            <tr key={ key }>
-              <td>{expenses[key].descriptionExpense}</td>
-              <td>{expenses[key].categoryExpense}</td>
-              <td>{expenses[key].payment}</td>
-              <td>{expenses[key].expense}</td>
-              <td>{name}</td>
-              <td>{expenses[key].ask}</td>
-              <td>{expenses[key].valueTotal}</td>
-              <td>{real}</td>
+        <thead>
+          <tr>
+            {tags.map((tag) => (<th key={ tag }>{tag}</th>))}
+          </tr>
+        </thead>
+        <tbody>
+          {expenses.length >= 1 && expenses.map((expense) => (
+            <tr key={ expense.id }>
+              <td>{expense.descriptionExpense}</td>
+              <td>{expense.categoryExpense}</td>
+              <td>{expense.payment}</td>
+              <td>{expense.expense}</td>
+              <td>{expense.nameExchange}</td>
+              <td>{expense.ask}</td>
+              <td>{expense.valueTotal}</td>
+              <td>{expense.conversionCurrency}</td>
               <td>
                 <button
                   type="button"
                   data-testid="delete-btn"
-                  onClick={ () => {
-                    deleteExpense(expenses[key].id);
-                  } }
+                  onClick={ () => deleteExpense(expense.id) }
                 >
                   Deletar
                 </button>
-
               </td>
             </tr>
-          );
-        })}
+          ))}
+        </tbody>
       </table>
     );
   }
@@ -61,7 +58,16 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 ExpenseTable.propTypes = {
-  expenses: PropTypes.arrayOf().isRequired,
+  expenses: PropTypes.arrayOf(PropTypes.shape({
+    descriptionExpense: PropTypes.string.isRequired,
+    categoryExpense: PropTypes.string.isRequired,
+    ask: PropTypes.string.isRequired,
+    payment: PropTypes.string.isRequired,
+    expense: PropTypes.string.isRequired,
+    valueTotal: PropTypes.number.isRequired,
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
   deleteExpense: PropTypes.func.isRequired,
 };
 
