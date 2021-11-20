@@ -70,7 +70,7 @@ class Form extends React.Component {
     ask *= expense;
     addExpense({
       id,
-      expense: ask,
+      expense: ask.toFixed(2),
       descriptionExpense,
       currency,
       payment,
