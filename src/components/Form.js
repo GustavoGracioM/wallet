@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { actionCurrencies, actionValueTotal, actionWallet } from '../actions';
+import { categoryExpenseList, paymentList } from './Options';
 
 class Form extends React.Component {
   constructor() {
@@ -39,25 +40,32 @@ class Form extends React.Component {
     }
   }
 
+  currenciesList() {
+    const { currencies } = this.state;
+    return Object.keys(currencies).map((key) => (
+      <option key={ key } value={ key }>{key}</option>
+    ));
+  }
+
   handleChange({ target }) {
     this.setState({
       [target.name]: target.value,
     });
   }
 
-  handleClick(event) {
+  async handleClick(event) {
     event.preventDefault();
     const { addExpense, addValueTotal } = this.props;
+    const { getCurrencies } = this.props;
     const {
       expense,
       descriptionExpense,
       currency,
       payment,
       categoryExpense,
-      currencies,
     } = this.state;
     let { id } = this.state;
-    let { ask } = currencies[currency];
+    let { ask } = (await getCurrencies()).value[currency];
     id += 1;
     ask *= expense;
     addExpense({
@@ -69,31 +77,6 @@ class Form extends React.Component {
       categoryExpense,
     });
     this.setState({ id }, () => addValueTotal(this.counterCurrencies()));
-  }
-
-  currenciesList() {
-    const { currencies } = this.state;
-    return Object.keys(currencies).map((key) => (
-      <option key={ key } value={ key }>{key}</option>
-    ));
-  }
-
-  paymentList() {
-    const paymentArray = ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'];
-    return paymentArray.map((pay) => (
-      <option key={ pay } value={ pay }>{pay}</option>
-    ));
-  }
-
-  categoryExpenseList() {
-    const categoryExpenseArray = ['Alimentação',
-      'Lazer',
-      'Trabalho',
-      'Transporte',
-      'Saúde'];
-    return categoryExpenseArray.map((pay) => (
-      <option key={ pay } value={ pay }>{pay}</option>
-    ));
   }
 
   render() {
@@ -129,14 +112,14 @@ class Form extends React.Component {
           name="payment"
           value={ payment }
         >
-          {this.paymentList()}
+          {paymentList()}
         </select>
         <select
           data-testid="tag-input"
           name="categoryExpense"
           value={ categoryExpense }
         >
-          {this.categoryExpenseList()}
+          {categoryExpenseList()}
         </select>
         <button type="submit">Adicionar despesa</button>
       </form>
