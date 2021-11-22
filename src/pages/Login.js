@@ -41,11 +41,11 @@ class Login extends React.Component {
   render() {
     const { email, password, isDisabled } = this.state;
     return (
-      <seciotn className="container">
-        <h1 className="text-center">
+      <section className="section-login">
+        <h1 className="text-center fs-1">
           Login
         </h1>
-        <form onSubmit={ this.handleClick } className=" form-login container ">
+        <form onSubmit={ this.handleClick } className=" form-login container">
           <label htmlFor="email">
             Email
             <input
@@ -70,13 +70,13 @@ class Login extends React.Component {
           </label>
           <button
             type="submit"
-            className="btn btn-primary"
+            className="btn button"
             disabled={ isDisabled }
           >
             Entrar
           </button>
         </form>
-      </seciotn>
+      </section>
     );
   }
 }

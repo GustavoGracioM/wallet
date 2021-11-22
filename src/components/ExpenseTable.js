@@ -15,14 +15,14 @@ class ExpenseTable extends React.Component {
   render() {
     const { expenses, deleteExpense } = this.props;
     return (
-      <table className="table">
+      <table className="table table-hover">
         <thead>
           <tr>
             {tags.map((tag) => (<th key={ tag }>{tag}</th>))}
           </tr>
         </thead>
         <tbody>
-          {expenses.length >= 1 && expenses.map((expense) => {
+          {expenses && expenses.map((expense) => {
             const { ask, name } = expense.exchangeRates[expense.currency];
             const nameExchange = name.split('/')[0];
             const valueTotal = Number(ask * expense.value).toFixed(2);

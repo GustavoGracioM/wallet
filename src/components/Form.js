@@ -3,15 +3,20 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { actionCurrencies, actionValueTotal, actionWallet } from '../actions';
 import { categoryExpenseList, paymentList } from './Options';
+import InputForm from './InputForm';
+import TextareaForm from './TextareaForm';
+import SelectForm from './SelectForm';
+import SelectOptins from './SelectOptins';
 
 const INITIAL_STATE = {
   id: 0,
-  expense: 0,
-  descript: '',
+  value: 0,
+  description: '',
   currency: 'USD',
-  payment: 'Dinheiro',
-  categoryExpense: 'Alimentação',
+  method: 'Dinheiro',
+  tag: 'Alimentação',
 };
+
 class Form extends React.Component {
   constructor() {
     super();
@@ -20,19 +25,9 @@ class Form extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { getCurrencies } = this.props;
     getCurrencies();
-  }
-
-  counterCurrencies() {
-    const { expenses } = this.props;
-    if (expenses) {
-      return expenses
-        .reduce((acc, curr) => acc
-        + Number(curr.exchangeRates[curr.currency].ask * curr.value),
-        0);
-    }
   }
 
   handleChange({ target }) {
@@ -43,90 +38,73 @@ class Form extends React.Component {
 
   async handleClick(event) {
     event.preventDefault();
-    const {
-      expense,
-      descript,
-      currency,
-      payment,
-      categoryExpense,
-      id,
-    } = this.state;
+    const { id } = this.state;
     const { addExpense, addValueTotal, getCurrencies, expenses } = this.props;
     const exchangeRates = (await getCurrencies()).value;
-    addExpense({
-      id: expenses.length,
-      currency,
-      value: expense,
-      description: descript,
-      method: payment,
-      tag: categoryExpense,
-      exchangeRates,
-    });
+    addExpense({ ...this.state, id: expenses.length, exchangeRates });
     this.setState(
       { ...INITIAL_STATE, id },
       () => addValueTotal(this.counterCurrencies()),
     );
   }
 
-  currenciesList() {
-    const { currencies } = this.props;
-    return currencies.map((currencie) => (
-      <option
-        key={ currencie }
-        value={ currencie }
-        data-testid={ currencie }
-      >
-        {currencie}
-      </option>
-    ));
+  counterCurrencies() {
+    const { expenses } = this.props;
+    if (expenses) {
+      return expenses
+        .reduce((acc, curr) => acc
+          + Number(curr.exchangeRates[curr.currency].ask * curr.value),
+        0);
+    }
   }
 
   render() {
     const {
-      expense,
-      descript,
+      value,
+      description,
       currency,
-      payment,
-      categoryExpense,
+      method,
+      tag,
     } = this.state;
     return (
       <form
         onSubmit={ this.handleClick }
         onChange={ this.handleChange }
-        className="col-auto"
+        className="form-wallet row g-2"
       >
-        <input
+        <InputForm
           type="number"
-          data-testid="value-input"
-          name="expense"
-          value={ expense }
+          id="value-input"
+          name="value"
+          value={ value }
+          text="Valor"
         />
-        <textarea data-testid="description-input" name="descript" value={ descript } />
-        <label htmlFor="currency">
-          <select
-            data-testid="currency-input"
-            name="currency"
-            value={ currency }
-          >
-            {this.currenciesList()}
-          </select>
-          Moeda
-        </label>
-        <select
-          data-testid="method-input"
-          name="payment"
-          value={ payment }
-        >
-          {paymentList()}
-        </select>
-        <select
-          data-testid="tag-input"
-          name="categoryExpense"
-          value={ categoryExpense }
-        >
-          {categoryExpenseList()}
-        </select>
-        <button type="submit" className="btn btn-primary">Adicionar despesa</button>
+        <TextareaForm
+          id="description-input"
+          name="description"
+          value={ description }
+          text="Descrição"
+        />
+        <SelectOptins
+          value={ currency }
+        />
+        <SelectForm
+          id="method-input"
+          name="method"
+          value={ method }
+          options={ paymentList }
+          text="Método de pagamento"
+        />
+        <SelectForm
+          id="tag-input"
+          name="tag"
+          value={ tag }
+          options={ categoryExpenseList }
+          text="Tag"
+        />
+        <button type="submit" className="btn col button">
+          Adicionar despesa
+        </button>
       </form>
     );
   }
@@ -147,7 +125,6 @@ Form.propTypes = {
   addExpense: PropTypes.func.isRequired,
   getCurrencies: PropTypes.func.isRequired,
   addValueTotal: PropTypes.func.isRequired,
-  currencies: PropTypes.arrayOf().isRequired,
   expenses: PropTypes.arrayOf(PropTypes.shape({
     valueTotal: PropTypes.shape({}).isRequired,
   })).isRequired,
