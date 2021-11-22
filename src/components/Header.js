@@ -7,10 +7,16 @@ class Header extends React.Component {
     const { email, valueTotal } = this.props;
     const value = valueTotal ? valueTotal.toFixed(2) : 0;
     return (
-      <header>
-        <p data-testid="email-field">{email}</p>
-        <p data-testid="total-field">{value}</p>
-        <p data-testid="header-currency-field">BRL</p>
+      <header className="header-wallet bg-dark">
+        <h4 data-testid="email-field">
+          {email}
+        </h4>
+        <div className="expenses">
+          <h4 data-testid="total-field">
+            {value}
+          </h4>
+          <h4 data-testid="header-currency-field"> BRL</h4>
+        </div>
       </header>
     );
   }

@@ -3,19 +3,19 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { actionDeleteExpends } from '../actions';
 
+const tags = ['Descrição', 'Tag',
+  'Método de pagamento',
+  'Valor', 'Moeda',
+  'Câmbio utilizado',
+  'Valor convertido',
+  'Moeda de conversão',
+  'Editar/Excluir'];
+
 class ExpenseTable extends React.Component {
   render() {
-    const tags = ['Descrição', 'Tag',
-      'Método de pagamento',
-      'Valor', 'Moeda',
-      'Câmbio utilizado',
-      'Valor convertido',
-      'Moeda de conversão',
-      'Editar/Excluir'];
-
     const { expenses, deleteExpense } = this.props;
     return (
-      <table>
+      <table className="table">
         <thead>
           <tr>
             {tags.map((tag) => (<th key={ tag }>{tag}</th>))}
@@ -40,10 +40,19 @@ class ExpenseTable extends React.Component {
                 <td>
                   <button
                     type="button"
+                    className="btn btn-danger"
                     data-testid="delete-btn"
                     onClick={ () => deleteExpense(expense) }
                   >
                     Deletar
+                  </button>
+                  <button
+                    type="button"
+                    data-testid="edit-btn"
+                    className="btn btn-warning"
+                    onClick={ () => deleteExpense(expense) }
+                  >
+                    Editar
                   </button>
                 </td>
               </tr>

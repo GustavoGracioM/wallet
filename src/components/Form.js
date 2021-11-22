@@ -7,7 +7,7 @@ import { categoryExpenseList, paymentList } from './Options';
 const INITIAL_STATE = {
   id: 0,
   expense: 0,
-  descriptionExpense: '',
+  descript: '',
   currency: 'USD',
   payment: 'Dinheiro',
   categoryExpense: 'Alimentação',
@@ -27,7 +27,6 @@ class Form extends React.Component {
 
   counterCurrencies() {
     const { expenses } = this.props;
-    console.log(expenses);
     if (expenses) {
       return expenses
         .reduce((acc, curr) => acc
@@ -46,7 +45,7 @@ class Form extends React.Component {
     event.preventDefault();
     const {
       expense,
-      descriptionExpense,
+      descript,
       currency,
       payment,
       categoryExpense,
@@ -58,7 +57,7 @@ class Form extends React.Component {
       id: expenses.length,
       currency,
       value: expense,
-      description: descriptionExpense,
+      description: descript,
       method: payment,
       tag: categoryExpense,
       exchangeRates,
@@ -78,7 +77,6 @@ class Form extends React.Component {
         data-testid={ currencie }
       >
         {currencie}
-
       </option>
     ));
   }
@@ -86,28 +84,27 @@ class Form extends React.Component {
   render() {
     const {
       expense,
-      descriptionExpense,
+      descript,
       currency,
       payment,
       categoryExpense,
     } = this.state;
     return (
-      <form onSubmit={ this.handleClick } onChange={ this.handleChange }>
+      <form
+        onSubmit={ this.handleClick }
+        onChange={ this.handleChange }
+        className="col-auto"
+      >
         <input
           type="number"
           data-testid="value-input"
           name="expense"
           value={ expense }
         />
-        <textarea
-          data-testid="description-input"
-          name="descriptionExpense"
-          value={ descriptionExpense }
-        />
+        <textarea data-testid="description-input" name="descript" value={ descript } />
         <label htmlFor="currency">
           <select
             data-testid="currency-input"
-            id="currency"
             name="currency"
             value={ currency }
           >
@@ -129,7 +126,7 @@ class Form extends React.Component {
         >
           {categoryExpenseList()}
         </select>
-        <button type="submit">Adicionar despesa</button>
+        <button type="submit" className="btn btn-primary">Adicionar despesa</button>
       </form>
     );
   }
@@ -139,7 +136,6 @@ const mapDispatchToProps = (dispatch) => ({
   addExpense: (value) => dispatch(actionWallet(value)),
   addValueTotal: (value) => dispatch(actionValueTotal(value)),
   getCurrencies: () => dispatch(actionCurrencies()),
-  // addCurrencies: (value) => dispatch(addCurrencies(value)),
 });
 
 const mapStateToProps = (state) => ({
@@ -152,7 +148,6 @@ Form.propTypes = {
   getCurrencies: PropTypes.func.isRequired,
   addValueTotal: PropTypes.func.isRequired,
   currencies: PropTypes.arrayOf().isRequired,
-  // addCurrencies: PropTypes.func.isRequired,
   expenses: PropTypes.arrayOf(PropTypes.shape({
     valueTotal: PropTypes.shape({}).isRequired,
   })).isRequired,

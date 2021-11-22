@@ -11,3 +11,32 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.form-login {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+}
+
+.form-login input {
+  margin: 10px 10px;
+}
+
+.form-login button {
+  margin: 10px 10px;
+}
+
+.header-wallet {
+  display: flex;
+  justify-content: end;
+  padding: 20px;
+  color: white; 
+}
+
+.expenses{
+  display: flex;
+}
+
+.btn-danger{
+  margin-right: 5px;
+}
