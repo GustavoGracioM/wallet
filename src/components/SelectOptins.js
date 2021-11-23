@@ -32,7 +32,7 @@ class SelectOptions extends React.Component {
 }
 
 SelectOptions.propTypes = {
-  currencies: PropTypes.arrayOf().isRequired,
+  currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
   value: PropTypes.string.isRequired,
 };
 

@@ -23,7 +23,7 @@ class InputFormWallet extends React.Component {
 
 InputFormWallet.propTypes = {
   id: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
