@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class InputForm extends React.Component {
+class InputFormWallet extends React.Component {
   render() {
     const { id, value, type, name, text } = this.props;
     return (
@@ -21,7 +21,7 @@ class InputForm extends React.Component {
   }
 }
 
-InputForm.propTypes = {
+InputFormWallet.propTypes = {
   id: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
@@ -29,4 +29,4 @@ InputForm.propTypes = {
   text: PropTypes.string.isRequired,
 };
 
-export default InputForm;
+export default InputFormWallet;

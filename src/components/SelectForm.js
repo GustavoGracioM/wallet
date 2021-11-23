@@ -11,6 +11,7 @@ class SelectForm extends React.Component {
           <select
             data-testid={ id }
             name={ name }
+            id={ name }
             value={ value }
             className="form-select"
           >

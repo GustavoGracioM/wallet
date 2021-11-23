@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { actionLogin } from '../actions';
+import InputForm from '../components/InputFormLogin';
 
 class Login extends React.Component {
   constructor() {
@@ -13,21 +14,25 @@ class Login extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.validation = this.validation.bind(this);
+  }
+
+  validation() {
+    const { email, password } = this.state;
+    const minCharacters = 6;
+    // regex retirando desse site https://www.horadecodar.com.br/2020/09/
+    // 13/como-validar-email-com-javascript/
+    const regex = /\S+@\S+\.\S+/;
+    if (regex.test(email) && password.length >= minCharacters) {
+      return this.setState({ isDisabled: false });
+    }
+    return this.setState({ isDisabled: true });
   }
 
   handleChange({ target }) {
     this.setState({
       [target.name]: target.value,
-    }, () => {
-      const { email, password } = this.state;
-      const minCharacters = 6;
-      // regex retirando desse site https://www.horadecodar.com.br/2020/09/13/como-validar-email-com-javascript/
-      const regex = /\S+@\S+\.\S+/;
-      if (regex.test(email) && password.length >= minCharacters) {
-        return this.setState({ isDisabled: false });
-      }
-      return this.setState({ isDisabled: true });
-    });
+    }, () => this.validation());
   }
 
   handleClick(event) {
@@ -45,29 +50,25 @@ class Login extends React.Component {
         <h1 className="text-center fs-1">
           Login
         </h1>
-        <form onSubmit={ this.handleClick } className=" form-login container">
-          <label htmlFor="email">
-            Email
-            <input
-              type="email"
-              data-testid="email-input"
-              className="form-control"
-              name="email"
-              value={ email }
-              onChange={ this.handleChange }
-            />
-          </label>
-          <label htmlFor="password">
-            Senha
-            <input
-              type="password"
-              data-testid="password-input"
-              className="form-control"
-              name="password"
-              value={ password }
-              onChange={ this.handleChange }
-            />
-          </label>
+        <form
+          onSubmit={ this.handleClick }
+          className=" form-login container"
+          onChange={ this.handleChange }
+        >
+          <InputForm
+            id="email-input"
+            name="email"
+            type="email"
+            value={ email }
+            text="Email"
+          />
+          <InputForm
+            id="password-input"
+            name="password"
+            type="password"
+            value={ password }
+            text="Senha"
+          />
           <button
             type="submit"
             className="btn button"

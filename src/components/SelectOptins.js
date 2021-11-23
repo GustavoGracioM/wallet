@@ -3,21 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 class SelectOptions extends React.Component {
-  options() {
-    const { currencies } = this.props;
-    return currencies.map((currencie) => (
-      <option
-        key={ currencie }
-        value={ currencie }
-        data-testid={ currencie }
-      >
-        {currencie}
-      </option>
-    ));
-  }
-
   render() {
-    const { value } = this.props;
+    const { value, currencies } = this.props;
     return (
       <div className="col">
         <label htmlFor="currency">
@@ -25,10 +12,18 @@ class SelectOptions extends React.Component {
           <select
             data-testid="currency-input"
             name="currency"
+            id="currency"
             value={ value }
             className="form-select"
           >
-            {this.options()}
+            {currencies.map((currencie) => (
+              <option
+                key={ currencie }
+                value={ currencie }
+                data-testid={ currencie }
+              >
+                {currencie}
+              </option>))}
           </select>
         </label>
       </div>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { actionCurrencies, actionValueTotal, actionWallet } from '../actions';
 import { categoryExpenseList, paymentList } from './Options';
-import InputForm from './InputForm';
+import InputForm from './InputFormWallet';
 import TextareaForm from './TextareaForm';
 import SelectForm from './SelectForm';
 import SelectOptins from './SelectOptins';
@@ -25,9 +25,9 @@ class Form extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { getCurrencies } = this.props;
-    getCurrencies();
+    await getCurrencies();
   }
 
   handleChange({ target }) {
@@ -51,10 +51,8 @@ class Form extends React.Component {
   counterCurrencies() {
     const { expenses } = this.props;
     if (expenses) {
-      return expenses
-        .reduce((acc, curr) => acc
-          + Number(curr.exchangeRates[curr.currency].ask * curr.value),
-        0);
+      return expenses.reduce((acc, curr) => (
+        acc + Number(curr.exchangeRates[curr.currency].ask * curr.value)), 0);
     }
   }
 
