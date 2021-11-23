@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { actionCurrencies, actionValueTotal, actionWallet } from '../actions';
+import { actionCurrencies, actionWallet } from '../actions';
 import { categoryExpenseList, paymentList } from './Options';
 import InputForm from './InputFormWallet';
 import TextareaForm from './TextareaForm';
@@ -39,21 +39,12 @@ class Form extends React.Component {
   async handleClick(event) {
     event.preventDefault();
     const { id } = this.state;
-    const { addExpense, addValueTotal, getCurrencies, expenses } = this.props;
+    const { addExpense, getCurrencies, expenses } = this.props;
     const exchangeRates = (await getCurrencies()).value;
     addExpense({ ...this.state, id: expenses.length, exchangeRates });
     this.setState(
       { ...INITIAL_STATE, id },
-      () => addValueTotal(this.counterCurrencies()),
     );
-  }
-
-  counterCurrencies() {
-    const { expenses } = this.props;
-    if (expenses) {
-      return expenses.reduce((acc, curr) => (
-        acc + Number(curr.exchangeRates[curr.currency].ask * curr.value)), 0);
-    }
   }
 
   render() {
@@ -110,7 +101,6 @@ class Form extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
   addExpense: (value) => dispatch(actionWallet(value)),
-  addValueTotal: (value) => dispatch(actionValueTotal(value)),
   getCurrencies: () => dispatch(actionCurrencies()),
 });
 
@@ -122,7 +112,6 @@ const mapStateToProps = (state) => ({
 Form.propTypes = {
   addExpense: PropTypes.func.isRequired,
   getCurrencies: PropTypes.func.isRequired,
-  addValueTotal: PropTypes.func.isRequired,
   expenses: PropTypes.arrayOf(PropTypes.shape({
     valueTotal: PropTypes.shape({}).isRequired,
   })).isRequired,

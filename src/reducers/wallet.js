@@ -17,11 +17,6 @@ const wallet = (state = INITIAL_STATE, action) => {
       ...state,
       currencies: Object.keys(action.value).map((key) => key),
     });
-  case 'VALUE_TOTAL':
-    return ({
-      ...state,
-      valueTotal: action.value,
-    });
   case 'DELETE_EXPENDS':
     return ({
       ...state,

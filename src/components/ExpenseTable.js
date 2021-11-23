@@ -46,14 +46,6 @@ class ExpenseTable extends React.Component {
                   >
                     Deletar
                   </button>
-                  <button
-                    type="button"
-                    data-testid="edit-btn"
-                    className="btn btn-warning"
-                    onClick={ () => deleteExpense(expense) }
-                  >
-                    Editar
-                  </button>
                 </td>
               </tr>
             );
