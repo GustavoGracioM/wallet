@@ -2,7 +2,8 @@
 const INITIAL_STATE = {
   currencies: [],
   expenses: [],
-  valueTotal: 0,
+  editor: false,
+  idToEdit: 0,
 };
 
 const wallet = (state = INITIAL_STATE, action) => {
@@ -20,11 +21,19 @@ const wallet = (state = INITIAL_STATE, action) => {
   case 'DELETE_EXPENDS':
     return ({
       ...state,
-      valueTotal:
-      state.valueTotal
-      - (action.value.value * action.value.exchangeRates[action.value.currency].ask),
       expenses: state.expenses
         .filter((value) => value.id !== action.value.id),
+    });
+  case 'EDIT_EXPENSE':
+    return ({
+      ...state,
+      editor: true,
+      idToEdit: action.value,
+    });
+  case 'DISABLE_EDIT':
+    return ({
+      ...state,
+      editor: false,
     });
   default:
     return state;
