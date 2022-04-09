@@ -43,6 +43,7 @@ class Form extends React.Component {
     const { id } = this.state;
     const { addExpense, getCurrencies, expenses } = this.props;
     const exchangeRates = (await getCurrencies()).value;
+    console.log(expenses.length);
     addExpense({ ...this.state, id: expenses.length, exchangeRates });
     this.setState(
       { ...INITIAL_STATE, id },
