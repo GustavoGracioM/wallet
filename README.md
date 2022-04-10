@@ -31,7 +31,6 @@ Projeto wallte é do módulo de front-end do curso de desenvolvimenento web da <
 4. Instale as dependências e inicialize o projeto
 
 * Instale as dependências:
-    * `nvm use 16`
     * `npm install`
 * Inicialize o projeto:
     * `npm start` 
