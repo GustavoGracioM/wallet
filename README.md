@@ -17,7 +17,6 @@ Projeto wallte é do módulo de front-end do curso de desenvolvimenento web da <
 * HTML
 * CSS
 * Bootstrap
-* Consumir API 
 
 ### Instrução de instalação
 
