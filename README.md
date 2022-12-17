@@ -2,7 +2,7 @@
 
 
 
-Projeto wallte é do módulo de front-end do curso de desenvolvimenento web da <a href="https://www.betrybe.com/">Trybe</a>. Objetivo do projeto era desenvolver uma aplicação para gerenciar o controle de gastos de diversas moedas, usando React e Redux.
+Projeto wallte é do módulo de front-end do curso de desenvolvimento web da <a href="https://www.betrybe.com/">Trybe</a>. Objetivo do projeto era desenvolver uma aplicação para gerenciar o controle de gastos de diversas moedas, usando React e Redux.
 
 ![image](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![image](https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white)
